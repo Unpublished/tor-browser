@@ -18,6 +18,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -175,6 +176,8 @@ import org.mozilla.gecko.widget.AnimatedProgressBar;
 import org.mozilla.gecko.widget.GeckoActionProvider;
 import org.mozilla.gecko.widget.SplashScreen;
 import org.mozilla.geckoview.GeckoSession;
+
+import info.guardianproject.netcipher.proxy.OrbotHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -1271,6 +1274,30 @@ public class BrowserApp extends GeckoApp
         }
     }
 
+    public void checkStartOrbot() {
+        if (!OrbotHelper.isOrbotInstalled(this)) {
+            final Intent installOrbotIntent = OrbotHelper.getOrbotInstallIntent(this);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.install_orbot);
+            builder.setMessage(R.string.you_must_have_orbot);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivity(installOrbotIntent);
+                }
+            });
+            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                }
+            });
+            builder.show();
+        } else {
+            OrbotHelper.requestStartTor(this);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -1288,6 +1315,13 @@ public class BrowserApp extends GeckoApp
 
         for (BrowserAppDelegate delegate : delegates) {
             delegate.onResume(this);
+        }
+
+        // isInAutomation is overloaded with isTorBrowser(), but here we actually
+        // need to know if we are in automation.
+        final SafeIntent intent = new SafeIntent(getIntent());
+        if (!IntentUtils.getIsInAutomationFromEnvironment(intent)) {
+            checkStartOrbot();
         }
     }
 
