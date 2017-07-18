@@ -8,6 +8,7 @@ package org.mozilla.gecko.firstrun;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import org.mozilla.gecko.AppConstants;
 import org.mozilla.gecko.GeckoSharedPrefs;
 import org.mozilla.gecko.R;
 import org.mozilla.gecko.Telemetry;
@@ -25,16 +26,24 @@ public class FirstrunPagerConfig {
     public static final String KEY_SUBTEXT = "subtextRes";
 
    public static List<FirstrunPanelConfig> getDefault(Context context) {
+        if (AppConstants.isTorBrowser()) {
+            return getRestricted ();
+        }
+
         final List<FirstrunPanelConfig> panels = new LinkedList<>();
-       panels.add(SimplePanelConfigs.welcomePanelConfig);
-       panels.add(SimplePanelConfigs.privatePanelConfig);
-       panels.add(SimplePanelConfigs.customizePanelConfig);
-       panels.add(SimplePanelConfigs.syncPanelConfig);
+        panels.add(SimplePanelConfigs.welcomePanelConfig);
+        panels.add(SimplePanelConfigs.privatePanelConfig);
+        panels.add(SimplePanelConfigs.customizePanelConfig);
+        panels.add(SimplePanelConfigs.syncPanelConfig);
 
         return panels;
     }
 
     public static List<FirstrunPanelConfig> forFxAUser(Context context) {
+        if (AppConstants.isTorBrowser()) {
+            return getRestricted ();
+        }
+
         final List<FirstrunPanelConfig> panels = new LinkedList<>();
         panels.add(SimplePanelConfigs.welcomePanelConfig);
         panels.add(SimplePanelConfigs.privatePanelConfig);
