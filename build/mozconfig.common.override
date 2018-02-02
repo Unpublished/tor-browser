@@ -9,3 +9,19 @@
 # to override anything done previously.
 #
 # The common expected usage is for try builds with nondefault options.
+
+mk_add_options MOZ_APP_DISPLAYNAME="Tor Browser"
+ac_add_options --with-branding=mobile/android/branding/torbrowser
+
+ac_add_options --enable-official-branding
+
+ac_add_options --disable-maintenance-service
+ac_add_options --disable-crashreporter
+ac_add_options --disable-webrtc
+
+unset MOZ_ANDROID_MMA
+unset MOZ_ANDROID_POCKET
+
+ac_add_options --without-google-play-services
+
+ac_add_options --disable-eme
