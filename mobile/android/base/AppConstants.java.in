@@ -134,17 +134,33 @@ public class AppConstants {
     public static final String USER_AGENT_BOT_LIKE = "Redirector/" + AppConstants.MOZ_APP_VERSION +
         " (Android; rv:" + AppConstants.MOZ_APP_VERSION + ")";
 
+    /* TBA: This is enforced by MOZ_ANDROID_MIN_SDK_VERSION=16 in confvars.sh */
+    // XXX We can see the distribution of Android devices, maybe we should choose
+    // a more popular version instead of the lowest.
+    // https://developer.android.com/about/dashboards/
+    public static final String LOWEST_SUPPORTED_VERSION = "4.1.0";
+
+    // TBA: Fennec's UAS now contains the Android version. Hard-code all users into the
+    // lowest supported version (Android 4.1.0 - Jellybean).
     public static final String USER_AGENT_FENNEC_MOBILE = "Mozilla/5.0 (Android " +
+//#ifdef TOR_BROWSER_VERSION
+        LOWEST_SUPPORTED_VERSION + "; Mobile; rv:" +
+//#else
         Build.VERSION.RELEASE + "; Mobile; rv:" +
+//#endif
         AppConstants.MOZ_APP_VERSION + ") Gecko/" +
         AppConstants.MOZ_APP_VERSION + " Firefox/" +
         AppConstants.MOZ_APP_VERSION;
 
+//#ifdef TOR_BROWSER_VERSION
+    public static final String USER_AGENT_FENNEC_TABLET = USER_AGENT_FENNEC_MOBILE;
+//#else
     public static final String USER_AGENT_FENNEC_TABLET = "Mozilla/5.0 (Android " +
         Build.VERSION.RELEASE + "; Tablet; rv:" +
         AppConstants.MOZ_APP_VERSION + ") Gecko/" +
         AppConstants.MOZ_APP_VERSION + " Firefox/" +
         AppConstants.MOZ_APP_VERSION;
+//#endif
 
     public static final int MOZ_MIN_CPU_VERSION = @MOZ_MIN_CPU_VERSION@;
 
