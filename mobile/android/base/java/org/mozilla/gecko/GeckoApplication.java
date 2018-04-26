@@ -199,12 +199,16 @@ public class GeckoApplication extends Application
         if (mIsInitialResume) {
             GeckoBatteryManager.getInstance().start(this);
             GeckoFontScaleListener.getInstance().initialize(this);
+            if (!AppConstants.isTorBrowser()){
             GeckoNetworkManager.getInstance().start(this);
+            } // !isTorBrowser()
             mIsInitialResume = false;
         } else if (mPausedGecko) {
             GeckoThread.onResume();
             mPausedGecko = false;
+            if (!AppConstants.isTorBrowser()){
             GeckoNetworkManager.getInstance().start(this);
+            } // !isTorBrowser()
         }
 
         mInBackground = false;
