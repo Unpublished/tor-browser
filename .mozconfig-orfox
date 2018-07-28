@@ -16,7 +16,7 @@ ac_add_options --with-android-distribution-directory=@TOPSRCDIR@/mobile/android/
 ac_add_options --with-ccache
 
 ## See Bug 26320
-ac_add_options --enable-optimize="-Os"
+ac_add_options --enable-optimize="-findirect-inlining -Os"
 #ac_add_options --enable-official-branding
 ##ac_add_options --enable-tor-browser-update
 ##ac_add_options --enable-update-packaging
